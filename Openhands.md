@@ -55,3 +55,23 @@ State是一个数据结构，包含代理执行所需的所有信息。它是代
 ## Agent Delegation委托
 **多个代理之间的交互**
 任务分工，通用代理与专业代理配合
+
+## Agents' integration test 集成测试
+
+**1.集成测试框架通过自动化任务执行和结果验证，测试代理的端到端功能**
+人为定义任务和预期结果，当agent完成任务后将结果与gold file进行对比
+
+**2.mocking 模拟LLM**
+LLM的随机性：输入相同内容可能得到不同输出
+在代理和LLM中设置一个模拟系统，提供事先定义好的相应，不需要一直频繁调用LLM
+
+**3.重大变更时重新调用LLM**
+添加新测试或修改现有提示时，脚本使用真实 LLM 生成新的提示-响应对。
+
+## Workflow
+**1.input 用户提供一个基础Docker image**
+**2.OpenHands基于这个image构建OH runtime image**
+**3.使用构建好的 OH 运行时镜像启动一个 Docker 容器**
+**4.Communication 后端通过RESTful API 与容器内的运行时客户端通信**
+**5.Action Execution 客户端接收后端发送的动作，在沙盒环境中执行**
+**6.Observation Return 发送回 OpenHands 后端的event stream**
