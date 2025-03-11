@@ -110,6 +110,31 @@ ACI帮助LM理解可配置软件系统更改后的状态、管理历史记录，
 # 不依赖于用户的结果反馈，根据测试结果定位和修复的完全自动化流程
 **研究一个闭环 操作失败-->定位-->修复操作-->验证迭代**
 
+初始测试失败 → 提取反馈 → SWE-agent 定位 → 生成补丁 → 应用补丁 → 再次测试
+   ↑                                                    ↓
+测试通过 → 结束                                   失败 → 迭代
+
+**自动化测试框架**
+（pytest）agent每次修复后执行测试捕获失败信息-->根据上下文解析日志
+
+**反馈闭环**
+上一次测试失败的堆栈跟踪作为下一次输入的问题描述，进行一种反馈调节
+
+**问题陈述优化**
+在这个闭环中，问题描述是需要自动生成的，需要优化自动生成的问题描述，简洁明了的阐述相关错误，再作为输入给到agent
+
+**自动化迭代**
+
+```python
+prompts:
+    initial: |
+      Locate the bug causing this test failure: {problem_statement}
+      Use previous attempts if available: {previous_feedback}
+    refine: "Propose a fix for {file}:{line} based on test results"
+
+
+
+
 
 
 
